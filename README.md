@@ -11,8 +11,8 @@ Learn more about Ceph: <https://ceph.io/>
 
 ## Supported Tags and Respective `Vagrantfile` Links
 
-  - [`15.2`, `latest`](https://github.com/alvistack/vagrant-ceph/blob/master/molecule/15.2/Vagrantfile.j2)
-  - [`14.2`](https://github.com/alvistack/vagrant-ceph/blob/master/molecule/14.2/Vagrantfile.j2)
+  - [`15.2`, `latest`](https://github.com/alvistack/vagrant-ceph/blob/master/molecule/15.2/molecule.yml)
+  - [`14.2`](https://github.com/alvistack/vagrant-ceph/blob/master/molecule/14.2/molecule.yml)
 
 ## Overview
 
