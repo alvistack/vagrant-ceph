@@ -49,12 +49,6 @@
             - "./tasks"
       ignore_errors: true
 
-    - include_role:
-        name: bootstrap
-
-    - include_role:
-        name: python
-
 - hosts: ceph_mon:ceph_mgr:ceph_osd:ceph_mds:ceph_rgw
   remote_user: root
   become: true

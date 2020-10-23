@@ -26,7 +26,3 @@
 	path = roles/ceph_rgw
 	url = https://github.com/alvistack/ansible-role-ceph_rgw.git
 	branch = develop
-[submodule "roles/python"]
-	path = roles/python
-	url = https://github.com/alvistack/ansible-role-python.git
-	branch = develop
