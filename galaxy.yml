@@ -16,7 +16,7 @@
 
 namespace: alvistack
 name: vagrant-ceph
-description: Vagrant Box for Ceph
+description: Vagrant Box Packaging for Ceph
 
 version: VERSION
 readme: README.md
