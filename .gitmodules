@@ -22,3 +22,31 @@
 	path = roles/ceph_rgw
 	url = https://github.com/alvistack/ansible-role-ceph_rgw.git
 	branch = develop
+[submodule "roles/ansible"]
+	path = roles/ansible
+	url = https://github.com/alvistack/ansible-role-ansible.git
+	branch = develop
+[submodule "roles/cloud_init"]
+	path = roles/cloud_init
+	url = https://github.com/alvistack/ansible-role-cloud_init.git
+	branch = develop
+[submodule "roles/kernel"]
+	path = roles/kernel
+	url = https://github.com/alvistack/ansible-role-kernel.git
+	branch = develop
+[submodule "roles/locales"]
+	path = roles/locales
+	url = https://github.com/alvistack/ansible-role-locales.git
+	branch = develop
+[submodule "roles/python"]
+	path = roles/python
+	url = https://github.com/alvistack/ansible-role-python.git
+	branch = develop
+[submodule "roles/sshd"]
+	path = roles/sshd
+	url = https://github.com/alvistack/ansible-role-sshd.git
+	branch = develop
+[submodule "roles/timezone"]
+	path = roles/timezone
+	url = https://github.com/alvistack/ansible-role-timezone.git
+	branch = develop
