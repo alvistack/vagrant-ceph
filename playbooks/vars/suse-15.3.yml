@@ -14,20 +14,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-_apt:
+_zypper_repository:
+  - name: "repo-oss"
+    repo: "http://download.opensuse.org/distribution/leap/15.3/repo/oss"
+    state: "present"
+  - name: "repo-non-oss"
+    repo: "http://download.opensuse.org/distribution/leap/15.3/repo/non-oss"
+    state: "present"
+  - name: "update-oss"
+    repo: "http://download.opensuse.org/update/leap/15.3/oss"
+    state: "present"
+  - name: "update-non-oss"
+    repo: "http://download.opensuse.org/update/leap/15.3/non-oss"
+    state: "present"
+
+_zypper:
   - { state: "latest", name: "ca-certificates" }
-  - { state: "latest", name: "cloud-guest-utils" }
   - { state: "latest", name: "cloud-init" }
   - { state: "latest", name: "curl" }
   - { state: "latest", name: "gcc" }
+  - { state: "latest", name: "growpart" }
   - { state: "latest", name: "iproute2" }
-  - { state: "latest", name: "linux-generic" }
+  - { state: "latest", name: "kernel-default" }
+  - { state: "latest", name: "kernel-source" }
   - { state: "latest", name: "make" }
-  - { state: "latest", name: "openssh-server" }
-  - { state: "latest", name: "passwd" }
+  - { state: "latest", name: "openssh" }
   - { state: "latest", name: "perl" }
   - { state: "latest", name: "python3" }
-  - { state: "latest", name: "python3-dev" }
+  - { state: "latest", name: "python3-devel" }
   - { state: "latest", name: "rsync" }
+  - { state: "latest", name: "shadow" }
   - { state: "latest", name: "sudo" }
   - { state: "latest", name: "util-linux" }

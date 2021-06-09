@@ -14,4 +14,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-_apt: []
+_apt:
+  - { state: "latest", name: "ca-certificates" }
+  - { state: "latest", name: "cloud-guest-utils" }
+  - { state: "latest", name: "cloud-init" }
+  - { state: "latest", name: "curl" }
+  - { state: "latest", name: "gcc" }
+  - { state: "latest", name: "iproute2" }
+  - { state: "latest", name: "linux-generic" }
+  - { state: "latest", name: "make" }
+  - { state: "latest", name: "openssh-server" }
+  - { state: "latest", name: "passwd" }
+  - { state: "latest", name: "perl" }
+  - { state: "latest", name: "python3" }
+  - { state: "latest", name: "python3-dev" }
+  - { state: "latest", name: "rsync" }
+  - { state: "latest", name: "sudo" }
+  - { state: "latest", name: "util-linux" }

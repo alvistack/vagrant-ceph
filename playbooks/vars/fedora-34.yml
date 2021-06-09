@@ -14,20 +14,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-_apt:
+_yum_config_manager:
+  - { state: "enable", name: "fedora" }
+  - { state: "enable", name: "updates" }
+
+_yum:
   - { state: "latest", name: "ca-certificates" }
-  - { state: "latest", name: "cloud-guest-utils" }
   - { state: "latest", name: "cloud-init" }
+  - { state: "latest", name: "cloud-utils-growpart" }
   - { state: "latest", name: "curl" }
   - { state: "latest", name: "gcc" }
-  - { state: "latest", name: "iproute2" }
-  - { state: "latest", name: "linux-generic" }
+  - { state: "latest", name: "iproute" }
+  - { state: "latest", name: "kernel" }
+  - { state: "latest", name: "kernel-devel" }
   - { state: "latest", name: "make" }
   - { state: "latest", name: "openssh-server" }
-  - { state: "latest", name: "passwd" }
   - { state: "latest", name: "perl" }
   - { state: "latest", name: "python3" }
-  - { state: "latest", name: "python3-dev" }
+  - { state: "latest", name: "python3-devel" }
   - { state: "latest", name: "rsync" }
+  - { state: "latest", name: "shadow-utils" }
   - { state: "latest", name: "sudo" }
   - { state: "latest", name: "util-linux" }

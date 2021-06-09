@@ -1,8 +1,10 @@
 # Vagrant Box Packaging for Ceph
 
-## 15.2.5-XalvistackY - TBC
+## YYYYMMDD.Y.Z - TBC
 
 ### Major Changes
+
+  - Support Ceph 16.2
 
 ## 15.2.5-4alvistack1 - 2020-10-23
 

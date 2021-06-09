@@ -14,26 +14,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: copy templates
-  template:
-    dest: "{{ item.dest }}"
-    src: "{{ item.src | default('./templates' + item.dest + '.j2') }}"
-    owner: "{{ item.owner | default('root') }}"
-    group: "{{ item.group | default('root') }}"
-    mode: "{{ item.mode | default('0644') }}"
-  loop:
-    - { dest: "/etc/apt/sources.list" }
-
-- name: apt-get update
-  apt:
-    update_cache: true
+- name: rm -rf /etc/zypp/repos.d/*
+  raw: |
+    set -eu
+    rm -rf /etc/zypp/repos.d/*
   changed_when: false
+  failed_when: false
 
-- name: apt-get install
-  apt:
+- name: zypper addrepo
+  vars:
+    ansible_python_interpreter: "python3"
+  zypper_repository:
+    name: "{{ item.name }}"
+    repo: "{{ item.repo }}"
+    state: "{{ item.state }}"
+    disable_gpg_check: true
+    auto_import_keys: true
+    autorefresh: true
+  loop: "{{ _zypper_repository }}"
+  register: result
+  until: result is succeeded
+
+- name: zypper install
+  vars:
+    ansible_python_interpreter: "python3"
+  zypper:
     name: "{{ item.name }}"
     state: "{{ item.state }}"
-  loop: "{{ _apt }}"
+  loop: "{{ _zypper }}"
   register: result
   until: result is succeeded
 
@@ -50,18 +58,18 @@
     - { option: "GRUB_CMDLINE_LINUX", value: "net.ifnames=0 biosdevname=0" }
     - { option: "GRUB_CMDLINE_LINUX_DEFAULT", value: "net.ifnames=0 biosdevname=0" }
 
-- name: update-grub
-  command: update-grub
+- name: grub2-mkconfig -o /boot/grub2/grub
+  command: grub2-mkconfig -o /boot/grub2/grub
   changed_when: false
   failed_when: false
 
-- name: update-initramfs -c -k all
-  command: update-initramfs -c -k all
+- name: dracut -f
+  command: dracut -f
   changed_when: false
   failed_when: false
 
-- name: apt-get install qemu-guest-agent
-  apt:
+- name: zypper install qemu-guest-agent
+  zypper:
     name: "{{ item.name }}"
     state: "{{ item.state }}"
   loop:

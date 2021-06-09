@@ -14,26 +14,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: copy templates
-  template:
-    dest: "{{ item.dest }}"
-    src: "{{ item.src | default('./templates' + item.dest + '.j2') }}"
-    owner: "{{ item.owner | default('root') }}"
-    group: "{{ item.group | default('root') }}"
-    mode: "{{ item.mode | default('0644') }}"
-  loop:
-    - { dest: "/etc/apt/sources.list" }
-
-- name: apt-get update
-  apt:
-    update_cache: true
+- name: yum-config-manager --enable
+  command: yum-config-manager --{{ item.state }} {{ item.name }}
+  loop: "{{ _yum_config_manager }}"
   changed_when: false
+  failed_when: false
 
-- name: apt-get install
-  apt:
+- name: yum install
+  yum:
     name: "{{ item.name }}"
     state: "{{ item.state }}"
-  loop: "{{ _apt }}"
+  loop: "{{ _yum }}"
   register: result
   until: result is succeeded
 
@@ -50,18 +41,18 @@
     - { option: "GRUB_CMDLINE_LINUX", value: "net.ifnames=0 biosdevname=0" }
     - { option: "GRUB_CMDLINE_LINUX_DEFAULT", value: "net.ifnames=0 biosdevname=0" }
 
-- name: update-grub
-  command: update-grub
+- name: grub2-mkconfig -o /boot/grub2/grub
+  command: grub2-mkconfig -o /boot/grub2/grub
   changed_when: false
   failed_when: false
 
-- name: update-initramfs -c -k all
-  command: update-initramfs -c -k all
+- name: dracut -f
+  command: dracut -f
   changed_when: false
   failed_when: false
 
-- name: apt-get install qemu-guest-agent
-  apt:
+- name: yum install qemu-guest-agent
+  yum:
     name: "{{ item.name }}"
     state: "{{ item.state }}"
   loop:

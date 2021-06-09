@@ -21,7 +21,8 @@ _apt:
   - { state: "latest", name: "curl" }
   - { state: "latest", name: "gcc" }
   - { state: "latest", name: "iproute2" }
-  - { state: "latest", name: "linux-generic" }
+  - { state: "latest", name: "linux-headers-amd64" }
+  - { state: "latest", name: "linux-image-amd64" }
   - { state: "latest", name: "make" }
   - { state: "latest", name: "openssh-server" }
   - { state: "latest", name: "passwd" }
