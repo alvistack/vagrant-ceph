@@ -22,15 +22,96 @@
       include_vars: "./vars/main.yml"
 
     - name: include release specific variables
-      include_vars: "{{ lookup('first_found', _params) }}"
+      include_vars: "{{ _loop_var }}"
+      loop: "{{ query('first_found', _params) }}"
+      loop_control:
+        loop_var: _loop_var
       vars:
         _params:
           files:
             - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version | lower }}.yml"
             - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
-            - "{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
             - "{{ ansible_distribution | lower }}.yml"
+            - "{{ ansible_os_family | lower }}-{{ ansible_distribution_version | lower }}.yml"
+            - "{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
             - "{{ ansible_os_family | lower }}.yml"
           paths:
             - "./vars"
-      ignore_errors: true
+          skip: true
+
+    - name: ssh-keygen
+      shell: |
+        set -euxo pipefail
+        ssh-keygen -A
+      args:
+        executable: "/bin/bash"
+      changed_when: false
+      failed_when: false
+
+    - name: prepare directories
+      file:
+        dest: "{{ item.dest }}"
+        owner: "{{ item.owner | default('root') }}"
+        group: "{{ item.group | default('root') }}"
+        mode: "{{ item.mode | default('0755') }}"
+        state: "{{ item.state | default('directory') }}"
+      loop:
+        - { dest: "/root", mode: "0700" }
+        - { dest: "/root/.ssh", mode: "0700" }
+        - { dest: "/run/sshd" }
+
+    - name: touch files
+      copy:
+        dest: "{{ item.dest }}"
+        owner: "{{ item.owner | default('root') }}"
+        group: "{{ item.group | default('root') }}"
+        mode: "{{ item.mode | default('0644') }}"
+        content: ""
+        force: false
+      loop:
+        - { dest: "/root/.ssh/authorized_keys", mode: "0600" }
+
+    - name: group by
+      group_by:
+        key: "{{ item.key }}"
+      loop:
+        - { key: "ceph_mon" }
+        - { key: "ceph_mgr" }
+        - { key: "ceph_osd" }
+        - { key: "ceph_mds" }
+        - { key: "ceph_rgw" }
+
+    - name: add host
+      add_host:
+        hostname: "{{ item.hostname }}"
+        groups: "{{ item.groups }}"
+      loop:
+        - { hostname: "{{ inventory_hostname }}", groups: "ceph_mon" }
+        - { hostname: "{{ inventory_hostname }}", groups: "ceph_mgr" }
+        - { hostname: "{{ inventory_hostname }}", groups: "ceph_osd" }
+        - { hostname: "{{ inventory_hostname }}", groups: "ceph_mds" }
+        - { hostname: "{{ inventory_hostname }}", groups: "ceph_rgw" }
+
+    - name: include role
+      include_role:
+        name: ceph_common
+
+    - name: include role
+      include_role:
+        name: ceph_mon
+
+    - name: include role
+      include_role:
+        name: ceph_mgr
+
+    - name: include role
+      include_role:
+        name: ceph_osd
+
+    - name: include role
+      include_role:
+        name: ceph_mds
+
+    - name: include role
+      include_role:
+        name: ceph_rgw
