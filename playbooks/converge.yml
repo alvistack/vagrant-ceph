@@ -156,9 +156,11 @@
       failed_when: false
 
     - name: rm -rf /var/lib/ceph/*
-      raw: |
-        set -eu
+      shell: |
+        set -euxo pipefail
         rm -rf /etc/ceph/*
         rm -rf /var/lib/ceph/*
+      args:
+        executable: "/bin/bash"
       changed_when: false
       failed_when: false
