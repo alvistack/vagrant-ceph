@@ -5,6 +5,7 @@
 ### Major Changes
 
   - Support Ceph 16.2
+  - Revamp with Packer
 
 ## 15.2.5-4alvistack1 - 2020-10-23
 
