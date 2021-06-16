@@ -4,6 +4,7 @@
 
 ### Major Changes
 
+  - Upgrade minimal Ansible community package support to 4.1.0
   - Support Ceph 16.2
   - Revamp with Packer
 
