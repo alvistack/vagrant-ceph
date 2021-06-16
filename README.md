@@ -4,9 +4,7 @@
 [![GitHub release](https://img.shields.io/github/release/alvistack/vagrant-ceph.svg)](https://github.com/alvistack/vagrant-ceph/releases)
 [![GitHub license](https://img.shields.io/github/license/alvistack/vagrant-ceph.svg)](https://github.com/alvistack/vagrant-ceph/blob/master/LICENSE)
 \-[![Vagrant Box download](https://img.shields.io/badge/dynamic/json?label=alvistack%2Fceph-16.2&query=%24.boxes%5B%3A1%5D.downloads&url=https%3A%2F%2Fapp.vagrantup.com%2Fapi%2Fv1%2Fsearch%3Fq%3Dalvistack%2Fceph-16.2)](https://app.vagrantup.com/alvistack/boxes/ceph-16.2)
-
 Ceph uniquely delivers object, block, and file storage in one unified system.
-
 Learn more about Ceph: <https://ceph.io/>
 
 ## Supported Boxes and Respective Packer Template Links
@@ -29,18 +27,14 @@ Learn more about Ceph: <https://ceph.io/>
 ### Quick Start
 
 Once you have [Vagrant](https://www.vagrantup.com/docs/installation) and [VirtaulBox](https://www.virtualbox.org/) installed, run the following commands under your [project directory](https://learn.hashicorp.com/tutorials/vagrant/getting-started-project-setup?in=vagrant/getting-started):
-
-    # Initialize Vagrant
-    vagrant init alvistack/ceph-16.2
-    
-    # Start the virtual machine
-    vagrant up
-    
-    # SSH into this machine
-    vagrant ssh
-    
-    # Terminate the virtual machine
-    vagrant destroy --force
+\# Initialize Vagrant
+vagrant init alvistack/ceph-16.2
+\# Start the virtual machine
+vagrant up
+\# SSH into this machine
+vagrant ssh
+\# Terminate the virtual machine
+vagrant destroy --force
 
 ## Versioning
 
