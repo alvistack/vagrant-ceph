@@ -87,6 +87,10 @@
       "inventory_directory": "./",
       "playbook_file": "./packer.yml",
       "type": "ansible",
+      "extra_arguments": [
+        "-vvvv",
+        "--diff"
+      ],
       "user": "vagrant"
     }
   ]
