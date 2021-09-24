@@ -32,7 +32,32 @@ Learn more about Ceph: <https://ceph.io/>
 Once you have [Vagrant](https://www.vagrantup.com/docs/installation) and [VirtaulBox](https://www.virtualbox.org/) installed, run the following commands under your [project directory](https://learn.hashicorp.com/tutorials/vagrant/getting-started-project-setup?in=vagrant/getting-started):
 
     # Initialize Vagrant
-    vagrant init alvistack/ceph-16.2
+    cat > Vagrantfile <<-EOF
+    Vagrant.configure("2") do |config|
+      config.vm.hostname = "ceph-16.2"
+      config.vm.box = "alvistack/ceph-16.2"
+
+      config.vm.provider :libvirt do |libvirt|
+        libvirt.cpu_mode = "host-model"
+        libvirt.cpus = 2
+        libvirt.disk_bus = "virtio"
+        libvirt.disk_driver :cache => "writeback"
+        libvirt.driver = "kvm"
+        libvirt.memory = 8192
+        libvirt.memorybacking :access, :mode => "shared"
+        libvirt.nested = true
+        libvirt.nic_model_type = "virtio"
+        libvirt.storage :file, bus: "virtio", cache: "writeback"
+        libvirt.video_type = "virtio"
+      end
+
+      config.vm.provider :virtualbox do |virtualbox|
+        virtualbox.cpus = 2
+        virtualbox.memory = 8192
+        virtualbox.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
+      end
+    end
+    EOF
     
     # Start the virtual machine
     vagrant up
