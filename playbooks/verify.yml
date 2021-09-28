@@ -71,47 +71,80 @@
       loop:
         - { dest: "/root/.ssh/authorized_keys", mode: "0600" }
 
-    - name: group by
-      group_by:
-        key: "{{ item.key }}"
-      loop:
-        - { key: "ceph_mon" }
-        - { key: "ceph_mgr" }
-        - { key: "ceph_osd" }
-        - { key: "ceph_mds" }
-        - { key: "ceph_rgw" }
-
-    - name: add host
-      add_host:
-        hostname: "{{ item.hostname }}"
-        groups: "{{ item.groups }}"
-      loop:
-        - { hostname: "{{ inventory_hostname }}", groups: "ceph_mon" }
-        - { hostname: "{{ inventory_hostname }}", groups: "ceph_mgr" }
-        - { hostname: "{{ inventory_hostname }}", groups: "ceph_osd" }
-        - { hostname: "{{ inventory_hostname }}", groups: "ceph_mds" }
-        - { hostname: "{{ inventory_hostname }}", groups: "ceph_rgw" }
-
+- hosts: ceph_mon:ceph_mgr:ceph_osd:ceph_mds:ceph_rgw
+  remote_user: root
+  become: true
+  tasks:
     - name: include role
       include_role:
         name: ceph_common
 
+- hosts: ceph_mon
+  remote_user: root
+  become: true
+  tasks:
     - name: include role
       include_role:
         name: ceph_mon
 
+- hosts: ceph_mgr
+  remote_user: root
+  become: true
+  tasks:
     - name: include role
       include_role:
         name: ceph_mgr
 
+- hosts: ceph_osd
+  remote_user: root
+  become: true
+  tasks:
     - name: include role
       include_role:
         name: ceph_osd
 
+- hosts: ceph_mds
+  remote_user: root
+  become: true
+  tasks:
     - name: include role
       include_role:
         name: ceph_mds
 
+- hosts: ceph_rgw
+  remote_user: root
+  become: true
+  tasks:
     - name: include role
       include_role:
         name: ceph_rgw
+
+- hosts: ansible
+  remote_user: root
+  become: true
+  tasks:
+    - name: include role
+      include_role:
+        name: ceph_common
+
+    - name: base64 encode
+      shell: |
+        set -euxo pipefail
+        tar zcfP - {{ _params | join(' ') }} | base64 -w 0
+      vars:
+        _params:
+          - "/etc/ceph/ceph.client.admin.keyring"
+      args:
+        executable: "/bin/bash"
+      delegate_to: "{{ groups['ceph_mon'][0] }}"
+      register: base64_encode_result
+      changed_when: base64_encode_result is not succeeded
+
+    - name: base64 decode
+      shell: |
+        set -euxo pipefail
+        echo -n {{ base64_encode_result.stdout | quote }} | base64 -d | tar zx -C /
+      args:
+        executable: "/bin/bash"
+      register: base64_decode_result
+      changed_when: base64_decode_result is not succeeded
