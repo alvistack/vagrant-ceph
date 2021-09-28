@@ -84,6 +84,14 @@
   "provisioners": [
     {
       "galaxy_file": "./ansible-galaxy-requirements.yml",
+      "groups": [
+        "ansible",
+        "ceph_mon",
+        "ceph_mgr",
+        "ceph_osd",
+        "ceph_mds",
+        "ceph_rgw"
+      ],
       "inventory_directory": "./",
       "playbook_file": "./packer.yml",
       "type": "ansible",
