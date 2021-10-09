@@ -119,18 +119,16 @@
       include_role:
         name: ceph_rgw
 
-    - name: systemctl stop ceph.target
+    - name: "systemctl stop ceph-mon@{{ inventory_hostname }}.service"
       service:
         name: "{{ item.name }}"
         state: "stopped"
         enabled: false
       loop:
-        - { name: "ceph-radosgw.target" }
-        - { name: "ceph-mds.target" }
-        - { name: "ceph-osd.target" }
-        - { name: "ceph-mgr.target" }
-        - { name: "ceph-mon.target" }
-        - { name: "ceph.target" }
+        - { name: "ceph-radosgw@{{ inventory_hostname }}.service" }
+        - { name: "ceph-mds@{{ inventory_hostname }}.service" }
+        - { name: "ceph-mgr@{{ inventory_hostname }}.service" }
+        - { name: "ceph-mon@{{ inventory_hostname }}.service" }
       changed_when: false
       failed_when: false
 
