@@ -3,7 +3,7 @@
 <img src="/alvistack.svg" width="75" alt="AlviStack">
 
 [![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline/alvistack/vagrant-ceph/master)](https://gitlab.com/alvistack/vagrant-ceph/-/pipelines)
-[![GitHub release](https://img.shields.io/github/release/alvistack/vagrant-ceph.svg)](https://github.com/alvistack/vagrant-ceph/releases)
+[![GitHub tag](https://img.shields.io/github/tag/alvistack/vagrant-ceph.svg)](https://github.com/alvistack/vagrant-ceph/tags)
 [![GitHub license](https://img.shields.io/github/license/alvistack/vagrant-ceph.svg)](https://github.com/alvistack/vagrant-ceph/blob/master/LICENSE) -[![Vagrant Box download](https://img.shields.io/badge/dynamic/json?label=alvistack%2Fceph-16.2&query=%24.boxes%5B%3A1%5D.downloads&url=https%3A%2F%2Fapp.vagrantup.com%2Fapi%2Fv1%2Fsearch%3Fq%3Dalvistack%2Fceph-16.2)](https://app.vagrantup.com/alvistack/boxes/ceph-16.2)
 
 Ceph uniquely delivers object, block, and file storage in one unified system.
@@ -72,7 +72,7 @@ Once you have [Vagrant](https://www.vagrantup.com/docs/installation) and [Virtau
 
 ### `YYYYMMDD.Y.Z`
 
-Release tags could be find from [GitHub Release](https://github.com/alvistack/vagrant-ceph/releases) of this repository. Thus using these tags will ensure you are running the most up to date stable version of this image.
+Release tags could be find from [GitHub Release](https://github.com/alvistack/vagrant-ceph/tags) of this repository. Thus using these tags will ensure you are running the most up to date stable version of this image.
 
 ### `YYYYMMDD.0.0`
 
