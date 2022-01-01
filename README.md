@@ -36,7 +36,7 @@ Once you have [Vagrant](https://www.vagrantup.com/docs/installation) and [Virtau
     Vagrant.configure("2") do |config|
       config.vm.hostname = "ceph-16.2"
       config.vm.box = "alvistack/ceph-16.2"
-
+    
       config.vm.provider :libvirt do |libvirt|
         libvirt.cpu_mode = "host-model"
         libvirt.cpus = 2
@@ -50,7 +50,7 @@ Once you have [Vagrant](https://www.vagrantup.com/docs/installation) and [Virtau
         libvirt.storage :file, bus: "virtio", cache: "writeback"
         libvirt.video_type = "virtio"
       end
-
+    
       config.vm.provider :virtualbox do |virtualbox|
         virtualbox.cpus = 2
         virtualbox.memory = 8192
