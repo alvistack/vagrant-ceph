@@ -12,6 +12,9 @@ Learn more about Ceph: <https://ceph.io/>
 
 ## Supported Boxes and Respective Packer Template Links
 
+  - [`alvistack/ceph-17.2`](https://app.vagrantup.com/alvistack/boxes/ceph-17.2)
+      - [`libvirt`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/libvirt-17.2/packer.json)
+      - [`virtualbox`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/virtualbox-17.2/packer.json)
   - [`alvistack/ceph-16.2`](https://app.vagrantup.com/alvistack/boxes/ceph-16.2)
       - [`libvirt`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/libvirt-16.2/packer.json)
       - [`virtualbox`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/virtualbox-16.2/packer.json)
