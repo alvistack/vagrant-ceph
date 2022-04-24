@@ -4,7 +4,6 @@
 
 ### Major Changes
 
-  - Ubuntu 22.04 based
   - Support RHEL 9
   - Support CentOS 9 Stream
   - Support openSUSE Leap 15.4
