@@ -31,6 +31,17 @@
     sh -x -c "ansible --version"
     sh -x -c "ansible-lint --version"
 
+.script-bootstrap-molecule: &script-bootstrap-molecule
+  - |
+    if ! [[ -x "$(command -v molecule)" ]]; then
+      export DEBIAN_FRONTEND="noninteractive"
+      echo "deb http://download.opensuse.org/repositories/home:/alvistack/xUbuntu_22.04/ /" | sudo tee /etc/apt/sources.list.d/home:alvistack.list
+      curl -fsSL https://download.opensuse.org/repositories/home:alvistack/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_alvistack.gpg > /dev/null
+      sudo -E apt-get update
+      sudo -E apt-get install -y python3-molecule python3-molecule-docker python3-molecule-vagrant
+    fi
+    sh -x -c "molecule --version"
+
 .script-bootstrap-libvirt: &script-bootstrap-libvirt
   - |
     if ! [[ -x "$(command -v qemu-system-x86_64)" ]]; then
@@ -96,6 +107,22 @@
     cd $CI_PROJECT_DIR/packer/$_PACKER_BUILDER_PROVIDER-$_PACKER_BUILDER_VERSION
     sudo -E packer build packer.json
 
+.script-vagrant-box-add: &script-vagrant-box-add
+  - |
+    export VAGRANT_HOME="$CI_PROJECT_DIR"
+    export _BOX="$(echo $CI_PROJECT_NAME | sed "s/^vagrant-//g")-$_PACKER_BUILDER_VERSION"
+    export _PROVIDER="$_PACKER_BUILDER_PROVIDER"
+    sudo -E vagrant box add \
+      --name $_BOX \
+      --provider $_PROVIDER \
+      $CI_PROJECT_DIR/packer/$_PACKER_BUILDER_PROVIDER-$_PACKER_BUILDER_VERSION/output-vagrant/package.box
+
+.script-molecule-test: &script-molecule-test
+  - |
+    export VAGRANT_HOME="$CI_PROJECT_DIR"
+    export MOLECULE_INSTANCE_NAME="$(pwgen -1AB 12)"
+    sudo -E molecule test -s $_PACKER_BUILDER_PROVIDER-$_PACKER_BUILDER_VERSION
+
 .script-vagrant-cloud-provider-upload: &script-vagrant-cloud-provider-upload
   - |
     if [[ -n "$CI_COMMIT_TAG" ]] && [[ "$CI_COMMIT_TAG" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
@@ -155,6 +182,17 @@
     - *script-linters
     - *script-packer-build
 
+.job-molecule: &job-molecule
+  script:
+    - *script-bootstrap-python
+    - *script-bootstrap-ansible
+    - *script-bootstrap-molecule
+    - *script-bootstrap-libvirt
+    - *script-bootstrap-virtualbox
+    - *script-bootstrap-vagrant
+    - *script-vagrant-box-add
+    - *script-molecule-test
+
 .job-vagrant-cloud-provider-upload: &job-vagrant-cloud-provider-upload
   script:
     - *script-bootstrap-vagrant
@@ -176,6 +214,20 @@ build:libvirt-17.2:
     _PACKER_BUILDER_PROVIDER: "libvirt"
     _PACKER_BUILDER_VERSION: "17.2"
 
+test:libvirt-17.2:
+  <<: *job-molecule
+  stage: test
+  cache:
+    key: "$CI_PIPELINE_ID-libvirt-17.2"
+    paths:
+      - packer/*/output-vagrant
+    policy: pull
+  variables:
+    _PACKER_BUILDER_PROVIDER: "libvirt"
+    _PACKER_BUILDER_VERSION: "17.2"
+  needs:
+    - build:libvirt-17.2
+
 deploy:libvirt-17.2:
   <<: *job-vagrant-cloud-provider-upload
   stage: deploy
@@ -188,7 +240,7 @@ deploy:libvirt-17.2:
     _PACKER_BUILDER_PROVIDER: "libvirt"
     _PACKER_BUILDER_VERSION: "17.2"
   needs:
-    - build:libvirt-17.2
+    - test:libvirt-17.2
 
 build:libvirt-16.2:
   <<: *job-packer-build
@@ -200,6 +252,20 @@ build:libvirt-16.2:
   variables:
     _PACKER_BUILDER_PROVIDER: "libvirt"
     _PACKER_BUILDER_VERSION: "16.2"
+
+test:libvirt-16.2:
+  <<: *job-molecule
+  stage: test
+  cache:
+    key: "$CI_PIPELINE_ID-libvirt-16.2"
+    paths:
+      - packer/*/output-vagrant
+    policy: pull
+  variables:
+    _PACKER_BUILDER_PROVIDER: "libvirt"
+    _PACKER_BUILDER_VERSION: "16.2"
+  needs:
+    - build:libvirt-16.2
 
 deploy:libvirt-16.2:
   <<: *job-vagrant-cloud-provider-upload
@@ -213,7 +279,7 @@ deploy:libvirt-16.2:
     _PACKER_BUILDER_PROVIDER: "libvirt"
     _PACKER_BUILDER_VERSION: "16.2"
   needs:
-    - build:libvirt-16.2
+    - test:libvirt-16.2
 
 build:libvirt-15.2:
   <<: *job-packer-build
@@ -225,6 +291,20 @@ build:libvirt-15.2:
   variables:
     _PACKER_BUILDER_PROVIDER: "libvirt"
     _PACKER_BUILDER_VERSION: "15.2"
+
+test:libvirt-15.2:
+  <<: *job-molecule
+  stage: test
+  cache:
+    key: "$CI_PIPELINE_ID-libvirt-15.2"
+    paths:
+      - packer/*/output-vagrant
+    policy: pull
+  variables:
+    _PACKER_BUILDER_PROVIDER: "libvirt"
+    _PACKER_BUILDER_VERSION: "15.2"
+  needs:
+    - build:libvirt-15.2
 
 deploy:libvirt-15.2:
   <<: *job-vagrant-cloud-provider-upload
@@ -238,11 +318,11 @@ deploy:libvirt-15.2:
     _PACKER_BUILDER_PROVIDER: "libvirt"
     _PACKER_BUILDER_VERSION: "15.2"
   needs:
-    - build:libvirt-15.2
+    - test:libvirt-15.2
 
-test:virtualbox-17.2:
+build:virtualbox-17.2:
   <<: *job-packer-build
-  stage: test
+  stage: build
   cache:
     key: "$CI_PIPELINE_ID-virtualbox-17.2"
     paths:
@@ -250,6 +330,20 @@ test:virtualbox-17.2:
   variables:
     _PACKER_BUILDER_PROVIDER: "virtualbox"
     _PACKER_BUILDER_VERSION: "17.2"
+
+test:virtualbox-17.2:
+  <<: *job-molecule
+  stage: test
+  cache:
+    key: "$CI_PIPELINE_ID-virtualbox-17.2"
+    paths:
+      - packer/*/output-vagrant
+    policy: pull
+  variables:
+    _PACKER_BUILDER_PROVIDER: "virtualbox"
+    _PACKER_BUILDER_VERSION: "17.2"
+  needs:
+    - build:virtualbox-17.2
 
 deploy:virtualbox-17.2:
   <<: *job-vagrant-cloud-provider-upload
@@ -265,9 +359,9 @@ deploy:virtualbox-17.2:
   needs:
     - test:virtualbox-17.2
 
-test:virtualbox-16.2:
+build:virtualbox-16.2:
   <<: *job-packer-build
-  stage: test
+  stage: build
   cache:
     key: "$CI_PIPELINE_ID-virtualbox-16.2"
     paths:
@@ -275,6 +369,20 @@ test:virtualbox-16.2:
   variables:
     _PACKER_BUILDER_PROVIDER: "virtualbox"
     _PACKER_BUILDER_VERSION: "16.2"
+
+test:virtualbox-16.2:
+  <<: *job-molecule
+  stage: test
+  cache:
+    key: "$CI_PIPELINE_ID-virtualbox-16.2"
+    paths:
+      - packer/*/output-vagrant
+    policy: pull
+  variables:
+    _PACKER_BUILDER_PROVIDER: "virtualbox"
+    _PACKER_BUILDER_VERSION: "16.2"
+  needs:
+    - build:virtualbox-16.2
 
 deploy:virtualbox-16.2:
   <<: *job-vagrant-cloud-provider-upload
@@ -290,9 +398,9 @@ deploy:virtualbox-16.2:
   needs:
     - test:virtualbox-16.2
 
-test:virtualbox-15.2:
+build:virtualbox-15.2:
   <<: *job-packer-build
-  stage: test
+  stage: build
   cache:
     key: "$CI_PIPELINE_ID-virtualbox-15.2"
     paths:
@@ -300,6 +408,20 @@ test:virtualbox-15.2:
   variables:
     _PACKER_BUILDER_PROVIDER: "virtualbox"
     _PACKER_BUILDER_VERSION: "15.2"
+
+test:virtualbox-15.2:
+  <<: *job-molecule
+  stage: test
+  cache:
+    key: "$CI_PIPELINE_ID-virtualbox-15.2"
+    paths:
+      - packer/*/output-vagrant
+    policy: pull
+  variables:
+    _PACKER_BUILDER_PROVIDER: "virtualbox"
+    _PACKER_BUILDER_VERSION: "15.2"
+  needs:
+    - build:virtualbox-15.2
 
 deploy:virtualbox-15.2:
   <<: *job-vagrant-cloud-provider-upload
