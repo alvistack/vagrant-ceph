@@ -77,7 +77,7 @@
   tasks:
     - name: include role
       ansible.builtin.include_role:
-        name: alvistack.ceph_common
+        name: ceph_common
 
 - hosts: ceph_mon
   remote_user: root
@@ -85,7 +85,7 @@
   tasks:
     - name: include role
       ansible.builtin.include_role:
-        name: alvistack.ceph_mon
+        name: ceph_mon
 
 - hosts: ceph_mgr
   remote_user: root
@@ -93,7 +93,7 @@
   tasks:
     - name: include role
       ansible.builtin.include_role:
-        name: alvistack.ceph_mgr
+        name: ceph_mgr
 
 - hosts: ceph_osd
   remote_user: root
@@ -101,7 +101,7 @@
   tasks:
     - name: include role
       ansible.builtin.include_role:
-        name: alvistack.ceph_osd
+        name: ceph_osd
 
 - hosts: ceph_mds
   remote_user: root
@@ -109,7 +109,7 @@
   tasks:
     - name: include role
       ansible.builtin.include_role:
-        name: alvistack.ceph_mds
+        name: ceph_mds
 
 - hosts: ceph_rgw
   remote_user: root
@@ -117,7 +117,7 @@
   tasks:
     - name: include role
       ansible.builtin.include_role:
-        name: alvistack.ceph_rgw
+        name: ceph_rgw
 
 - hosts: ansible
   remote_user: root
@@ -125,7 +125,7 @@
   tasks:
     - name: include role
       ansible.builtin.include_role:
-        name: alvistack.ceph_common
+        name: ceph_common
 
     - name: base64 encode
       ansible.builtin.shell: |
