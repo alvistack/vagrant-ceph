@@ -17,14 +17,26 @@
 - hosts: all
   remote_user: root
   become: true
-  gather_facts: false
   tasks:
-    - name: redhat | subscription-manager unregister
-      ansible.builtin.raw: |
-        set -eu
-        subscription-manager remove --all
-        subscription-manager unregister
-        subscription-manager clean
-      when: inventory_hostname != ansible_host
+    - name: "systemctl stop ceph-mon@{{ inventory_hostname }}.service"
+      ansible.builtin.service:
+        name: "{{ item.name }}"
+        state: "stopped"
+        enabled: false
+      loop:
+        - { name: "ceph-radosgw@{{ inventory_hostname }}.service" }
+        - { name: "ceph-mds@{{ inventory_hostname }}.service" }
+        - { name: "ceph-mgr@{{ inventory_hostname }}.service" }
+        - { name: "ceph-mon@{{ inventory_hostname }}.service" }
+      changed_when: false
+      failed_when: false
+
+    - name: rm -rf /var/lib/ceph/*
+      ansible.builtin.shell: |
+        set -euxo pipefail
+        rm -rf /etc/ceph/*
+        rm -rf /var/lib/ceph/*
+      args:
+        executable: "/bin/bash"
       changed_when: false
       failed_when: false
