@@ -4,7 +4,7 @@
 
 [![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline/alvistack/vagrant-ceph/master)](https://gitlab.com/alvistack/vagrant-ceph/-/pipelines)
 [![GitHub tag](https://img.shields.io/github/tag/alvistack/vagrant-ceph.svg)](https://github.com/alvistack/vagrant-ceph/tags)
-[![GitHub license](https://img.shields.io/github/license/alvistack/vagrant-ceph.svg)](https://github.com/alvistack/vagrant-ceph/blob/master/LICENSE) -[![Vagrant Box download](https://img.shields.io/badge/dynamic/json?label=alvistack%2Fceph-16.2&query=%24.boxes%5B%3A1%5D.downloads&url=https%3A%2F%2Fapp.vagrantup.com%2Fapi%2Fv1%2Fsearch%3Fq%3Dalvistack%2Fceph-16.2)](https://app.vagrantup.com/alvistack/boxes/ceph-16.2)
+[![GitHub license](https://img.shields.io/github/license/alvistack/vagrant-ceph.svg)](https://github.com/alvistack/vagrant-ceph/blob/master/LICENSE) -[![Vagrant Box download](https://img.shields.io/badge/dynamic/json?label=alvistack%2Fceph-17.2&query=%24.boxes%5B%3A1%5D.downloads&url=https%3A%2F%2Fapp.vagrantup.com%2Fapi%2Fv1%2Fsearch%3Fq%3Dalvistack%2Fceph-17.2)](https://app.vagrantup.com/alvistack/boxes/ceph-17.2)
 
 Ceph uniquely delivers object, block, and file storage in one unified system.
 
@@ -36,34 +36,36 @@ Once you have [Vagrant](https://www.vagrantup.com/docs/installation) and [Virtau
 
     # Initialize Vagrant
     cat > Vagrantfile <<-EOF
-    Vagrant.configure("2") do |config|
-      config.vm.hostname = "ceph-16.2"
-      config.vm.box = "alvistack/ceph-16.2"
+    Vagrant.configure('2') do |config|
+      config.vm.hostname = 'ceph-17.2'
+      config.vm.box = 'alvistack/ceph-17.2'
     
       config.vm.provider :libvirt do |libvirt|
-        libvirt.cpu_mode = "host-passthrough"
+        libvirt.cpu_mode = 'host-passthrough'
         libvirt.cpus = 2
-        libvirt.disk_bus = "virtio"
-        libvirt.disk_driver :cache => "writeback"
-        libvirt.driver = "kvm"
+        libvirt.disk_bus = 'virtio'
+        libvirt.disk_driver :cache => 'writeback'
+        libvirt.driver = 'kvm'
         libvirt.memory = 8192
-        libvirt.memorybacking :access, :mode => "shared"
+        libvirt.memorybacking :access, :mode => 'shared'
         libvirt.nested = true
-        libvirt.nic_model_type = "virtio"
-        libvirt.storage :file, bus: "virtio", cache: "writeback"
-        libvirt.video_type = "virtio"
+        libvirt.nic_model_type = 'virtio'
+        libvirt.storage :file, bus: 'virtio', cache: 'writeback'
+        libvirt.video_type = 'virtio'
       end
     
       config.vm.provider :virtualbox do |virtualbox|
+        config.vm.disk :disk, name: 'sdb', size: '10GB'
         virtualbox.cpus = 2
+        virtualbox.customize ['modifyvm', :id, '--cpu-profile', 'host']
+        virtualbox.customize ['modifyvm', :id, '--nested-hw-virt', 'on']
         virtualbox.memory = 8192
-        virtualbox.customize ["modifyvm", :id, "--cpu-profile", "host"]
-        virtualbox.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
       end
     end
     EOF
     
     # Start the virtual machine
+    export VAGRANT_EXPERIMENTAL='1'
     vagrant up
     
     # SSH into this machine
