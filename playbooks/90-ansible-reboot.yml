@@ -20,10 +20,10 @@
   tasks:
     - name: reboot
       ansible.builtin.reboot:
-        reboot_timeout: 1800
-        test_command: bash -c "(whoami)"
+        connect_timeout: 600
+        reboot_timeout: 600
+        post_reboot_delay: 60
+        test_command: bash -c "whoami"
       loop: "{{ ansible_play_hosts }}"
       delegate_to: "{{ item }}"
       run_once: true
-      changed_when: false
-      failed_when: false
