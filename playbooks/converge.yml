@@ -88,26 +88,50 @@
       ansible.builtin.include_role:
         name: sshd
 
+- hosts: ceph_mon:ceph_mgr:ceph_osd:ceph_mds:ceph_rgw
+  remote_user: root
+  become: true
+  tasks:
     - name: include role
       ansible.builtin.include_role:
         name: ceph_common
 
+- hosts: ceph_mon
+  remote_user: root
+  become: true
+  tasks:
     - name: include role
       ansible.builtin.include_role:
         name: ceph_mon
 
+- hosts: ceph_mgr
+  remote_user: root
+  become: true
+  tasks:
     - name: include role
       ansible.builtin.include_role:
         name: ceph_mgr
 
+- hosts: ceph_osd
+  remote_user: root
+  become: true
+  tasks:
     - name: include role
       ansible.builtin.include_role:
         name: ceph_osd
 
+- hosts: ceph_mds
+  remote_user: root
+  become: true
+  tasks:
     - name: include role
       ansible.builtin.include_role:
         name: ceph_mds
 
+- hosts: ceph_rgw
+  remote_user: root
+  become: true
+  tasks:
     - name: include role
       ansible.builtin.include_role:
         name: ceph_rgw
