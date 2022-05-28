@@ -104,25 +104,22 @@
 .script-packer-build: &script-packer-build
   - |
     sudo -E vagrant cloud auth login --token $VAGRANT_CLOUD_TOKEN
-    cd $CI_PROJECT_DIR/packer/$_PACKER_BUILDER_PROVIDER-$_PACKER_BUILDER_VERSION
+    cd $CI_PROJECT_DIR/packer/$_BOX-$_PROVIDER
     sudo -E packer build packer.json
 
 .script-vagrant-box-add: &script-vagrant-box-add
   - |
     export _ORG="$CI_PROJECT_NAMESPACE"
-    export _BOX="$(echo $CI_PROJECT_NAME | sed "s/^vagrant-//g")-$_PACKER_BUILDER_VERSION"
-    export _PROVIDER="$_PACKER_BUILDER_PROVIDER"
     sudo -E umount /home/vagrant/.vagrant.d/boxes
     sudo -E vagrant box add \
       --name $_ORG/$_BOX \
       --provider $_PROVIDER \
-      $CI_PROJECT_DIR/packer/$_PACKER_BUILDER_PROVIDER-$_PACKER_BUILDER_VERSION/output-vagrant/package.box
+      $CI_PROJECT_DIR/packer/$_BOX-$_PROVIDER/output-vagrant/package.box
 
 .script-molecule-test: &script-molecule-test
   - |
-    export VAGRANT_EXPERIMENTAL="1"
     export _MOLECULE_INSTANCE_NAME="$(pwgen -1AB 12)"
-    sudo -E molecule test -s $_PACKER_BUILDER_PROVIDER-$_PACKER_BUILDER_VERSION
+    sudo -E molecule test -s $_BOX-$_PROVIDER
 
 .script-vagrant-cloud-provider-upload: &script-vagrant-cloud-provider-upload
   - |
@@ -134,10 +131,8 @@
       exit 0
     fi
     sudo -E vagrant cloud auth login --token $VAGRANT_CLOUD_TOKEN
-    cd $CI_PROJECT_DIR/packer/$_PACKER_BUILDER_PROVIDER-$_PACKER_BUILDER_VERSION
+    cd $CI_PROJECT_DIR/packer/$_BOX-$_PROVIDER
     export _ORG="$CI_PROJECT_NAMESPACE"
-    export _BOX="$(echo $CI_PROJECT_NAME | sed "s/^vagrant-//g")-$_PACKER_BUILDER_VERSION"
-    export _PROVIDER="$_PACKER_BUILDER_PROVIDER"
     export _CHECKSUM="$(sha256sum output-vagrant/package.box | awk '{ print $1 }')"
     curl -skL \
       --header "Content-Type: application/json" \
@@ -183,7 +178,7 @@
     - *script-linters
     - *script-packer-build
 
-.job-molecule: &job-molecule
+.job-molecule-test: &job-molecule-test
   script:
     - *script-bootstrap-python
     - *script-bootstrap-ansible
@@ -200,240 +195,240 @@
     - *script-vagrant-cloud-provider-upload
 
 default:
-  retry: 2
   before_script:
     - *script-git-submodule
+  retry: 2
 
-build:libvirt-17.2:
+build:ceph-17.2-libvirt:
   <<: *job-packer-build
   stage: build
   cache:
-    key: "$CI_PIPELINE_ID-libvirt-17.2"
+    key: "$CI_PIPELINE_ID-ceph-17.2-libvirt"
     paths:
       - packer/*/output-vagrant
   variables:
-    _PACKER_BUILDER_PROVIDER: "libvirt"
-    _PACKER_BUILDER_VERSION: "17.2"
+    _BOX: "ceph-17.2"
+    _PROVIDER: "libvirt"
 
-test:libvirt-17.2:
-  <<: *job-molecule
+test:ceph-17.2-libvirt:
+  <<: *job-molecule-test
   stage: test
   cache:
-    key: "$CI_PIPELINE_ID-libvirt-17.2"
+    key: "$CI_PIPELINE_ID-ceph-17.2-libvirt"
     paths:
       - packer/*/output-vagrant
     policy: pull
   variables:
-    _PACKER_BUILDER_PROVIDER: "libvirt"
-    _PACKER_BUILDER_VERSION: "17.2"
+    _BOX: "ceph-17.2"
+    _PROVIDER: "libvirt"
   needs:
-    - build:libvirt-17.2
+    - build:ceph-17.2-libvirt
 
-deploy:libvirt-17.2:
+deploy:ceph-17.2-libvirt:
   <<: *job-vagrant-cloud-provider-upload
   stage: deploy
   cache:
-    key: "$CI_PIPELINE_ID-libvirt-17.2"
+    key: "$CI_PIPELINE_ID-ceph-17.2-libvirt"
     paths:
       - packer/*/output-vagrant
     policy: pull
   variables:
-    _PACKER_BUILDER_PROVIDER: "libvirt"
-    _PACKER_BUILDER_VERSION: "17.2"
+    _BOX: "ceph-17.2"
+    _PROVIDER: "libvirt"
   needs:
-    - test:libvirt-17.2
+    - test:ceph-17.2-libvirt
 
-build:libvirt-16.2:
+build:ceph-17.2-virtualbox:
   <<: *job-packer-build
   stage: build
   cache:
-    key: "$CI_PIPELINE_ID-libvirt-16.2"
+    key: "$CI_PIPELINE_ID-ceph-17.2-virtualbox"
     paths:
       - packer/*/output-vagrant
   variables:
-    _PACKER_BUILDER_PROVIDER: "libvirt"
-    _PACKER_BUILDER_VERSION: "16.2"
+    _BOX: "ceph-17.2"
+    _PROVIDER: "virtualbox"
 
-test:libvirt-16.2:
-  <<: *job-molecule
+test:ceph-17.2-virtualbox:
+  <<: *job-molecule-test
   stage: test
   cache:
-    key: "$CI_PIPELINE_ID-libvirt-16.2"
+    key: "$CI_PIPELINE_ID-ceph-17.2-virtualbox"
     paths:
       - packer/*/output-vagrant
     policy: pull
   variables:
-    _PACKER_BUILDER_PROVIDER: "libvirt"
-    _PACKER_BUILDER_VERSION: "16.2"
+    _BOX: "ceph-17.2"
+    _PROVIDER: "virtualbox"
   needs:
-    - build:libvirt-16.2
+    - build:ceph-17.2-virtualbox
 
-deploy:libvirt-16.2:
+deploy:ceph-17.2-virtualbox:
   <<: *job-vagrant-cloud-provider-upload
   stage: deploy
   cache:
-    key: "$CI_PIPELINE_ID-libvirt-16.2"
+    key: "$CI_PIPELINE_ID-ceph-17.2-virtualbox"
     paths:
       - packer/*/output-vagrant
     policy: pull
   variables:
-    _PACKER_BUILDER_PROVIDER: "libvirt"
-    _PACKER_BUILDER_VERSION: "16.2"
+    _BOX: "ceph-17.2"
+    _PROVIDER: "virtualbox"
   needs:
-    - test:libvirt-16.2
+    - test:ceph-17.2-virtualbox
 
-build:libvirt-15.2:
+build:ceph-16.2-libvirt:
   <<: *job-packer-build
   stage: build
   cache:
-    key: "$CI_PIPELINE_ID-libvirt-15.2"
+    key: "$CI_PIPELINE_ID-ceph-16.2-libvirt"
     paths:
       - packer/*/output-vagrant
   variables:
-    _PACKER_BUILDER_PROVIDER: "libvirt"
-    _PACKER_BUILDER_VERSION: "15.2"
+    _BOX: "ceph-16.2"
+    _PROVIDER: "libvirt"
 
-test:libvirt-15.2:
-  <<: *job-molecule
+test:ceph-16.2-libvirt:
+  <<: *job-molecule-test
   stage: test
   cache:
-    key: "$CI_PIPELINE_ID-libvirt-15.2"
+    key: "$CI_PIPELINE_ID-ceph-16.2-libvirt"
     paths:
       - packer/*/output-vagrant
     policy: pull
   variables:
-    _PACKER_BUILDER_PROVIDER: "libvirt"
-    _PACKER_BUILDER_VERSION: "15.2"
+    _BOX: "ceph-16.2"
+    _PROVIDER: "libvirt"
   needs:
-    - build:libvirt-15.2
+    - build:ceph-16.2-libvirt
 
-deploy:libvirt-15.2:
+deploy:ceph-16.2-libvirt:
   <<: *job-vagrant-cloud-provider-upload
   stage: deploy
   cache:
-    key: "$CI_PIPELINE_ID-libvirt-15.2"
+    key: "$CI_PIPELINE_ID-ceph-16.2-libvirt"
     paths:
       - packer/*/output-vagrant
     policy: pull
   variables:
-    _PACKER_BUILDER_PROVIDER: "libvirt"
-    _PACKER_BUILDER_VERSION: "15.2"
+    _BOX: "ceph-16.2"
+    _PROVIDER: "libvirt"
   needs:
-    - test:libvirt-15.2
+    - test:ceph-16.2-libvirt
 
-build:virtualbox-17.2:
+build:ceph-16.2-virtualbox:
   <<: *job-packer-build
   stage: build
   cache:
-    key: "$CI_PIPELINE_ID-virtualbox-17.2"
+    key: "$CI_PIPELINE_ID-ceph-16.2-virtualbox"
     paths:
       - packer/*/output-vagrant
   variables:
-    _PACKER_BUILDER_PROVIDER: "virtualbox"
-    _PACKER_BUILDER_VERSION: "17.2"
+    _BOX: "ceph-16.2"
+    _PROVIDER: "virtualbox"
 
-test:virtualbox-17.2:
-  <<: *job-molecule
+test:ceph-16.2-virtualbox:
+  <<: *job-molecule-test
   stage: test
   cache:
-    key: "$CI_PIPELINE_ID-virtualbox-17.2"
+    key: "$CI_PIPELINE_ID-ceph-16.2-virtualbox"
     paths:
       - packer/*/output-vagrant
     policy: pull
   variables:
-    _PACKER_BUILDER_PROVIDER: "virtualbox"
-    _PACKER_BUILDER_VERSION: "17.2"
+    _BOX: "ceph-16.2"
+    _PROVIDER: "virtualbox"
   needs:
-    - build:virtualbox-17.2
+    - build:ceph-16.2-virtualbox
 
-deploy:virtualbox-17.2:
+deploy:ceph-16.2-virtualbox:
   <<: *job-vagrant-cloud-provider-upload
   stage: deploy
   cache:
-    key: "$CI_PIPELINE_ID-virtualbox-17.2"
+    key: "$CI_PIPELINE_ID-ceph-16.2-virtualbox"
     paths:
       - packer/*/output-vagrant
     policy: pull
   variables:
-    _PACKER_BUILDER_PROVIDER: "virtualbox"
-    _PACKER_BUILDER_VERSION: "17.2"
+    _BOX: "ceph-16.2"
+    _PROVIDER: "virtualbox"
   needs:
-    - test:virtualbox-17.2
+    - test:ceph-16.2-virtualbox
 
-build:virtualbox-16.2:
+build:ceph-15.2-libvirt:
   <<: *job-packer-build
   stage: build
   cache:
-    key: "$CI_PIPELINE_ID-virtualbox-16.2"
+    key: "$CI_PIPELINE_ID-ceph-15.2-libvirt"
     paths:
       - packer/*/output-vagrant
   variables:
-    _PACKER_BUILDER_PROVIDER: "virtualbox"
-    _PACKER_BUILDER_VERSION: "16.2"
+    _BOX: "ceph-15.2"
+    _PROVIDER: "libvirt"
 
-test:virtualbox-16.2:
-  <<: *job-molecule
+test:ceph-15.2-libvirt:
+  <<: *job-molecule-test
   stage: test
   cache:
-    key: "$CI_PIPELINE_ID-virtualbox-16.2"
+    key: "$CI_PIPELINE_ID-ceph-15.2-libvirt"
     paths:
       - packer/*/output-vagrant
     policy: pull
   variables:
-    _PACKER_BUILDER_PROVIDER: "virtualbox"
-    _PACKER_BUILDER_VERSION: "16.2"
+    _BOX: "ceph-15.2"
+    _PROVIDER: "libvirt"
   needs:
-    - build:virtualbox-16.2
+    - build:ceph-15.2-libvirt
 
-deploy:virtualbox-16.2:
+deploy:ceph-15.2-libvirt:
   <<: *job-vagrant-cloud-provider-upload
   stage: deploy
   cache:
-    key: "$CI_PIPELINE_ID-virtualbox-16.2"
+    key: "$CI_PIPELINE_ID-ceph-15.2-libvirt"
     paths:
       - packer/*/output-vagrant
     policy: pull
   variables:
-    _PACKER_BUILDER_PROVIDER: "virtualbox"
-    _PACKER_BUILDER_VERSION: "16.2"
+    _BOX: "ceph-15.2"
+    _PROVIDER: "libvirt"
   needs:
-    - test:virtualbox-16.2
+    - test:ceph-15.2-libvirt
 
-build:virtualbox-15.2:
+build:ceph-15.2-virtualbox:
   <<: *job-packer-build
   stage: build
   cache:
-    key: "$CI_PIPELINE_ID-virtualbox-15.2"
+    key: "$CI_PIPELINE_ID-ceph-15.2-virtualbox"
     paths:
       - packer/*/output-vagrant
   variables:
-    _PACKER_BUILDER_PROVIDER: "virtualbox"
-    _PACKER_BUILDER_VERSION: "15.2"
+    _BOX: "ceph-15.2"
+    _PROVIDER: "virtualbox"
 
-test:virtualbox-15.2:
-  <<: *job-molecule
+test:ceph-15.2-virtualbox:
+  <<: *job-molecule-test
   stage: test
   cache:
-    key: "$CI_PIPELINE_ID-virtualbox-15.2"
+    key: "$CI_PIPELINE_ID-ceph-15.2-virtualbox"
     paths:
       - packer/*/output-vagrant
     policy: pull
   variables:
-    _PACKER_BUILDER_PROVIDER: "virtualbox"
-    _PACKER_BUILDER_VERSION: "15.2"
+    _BOX: "ceph-15.2"
+    _PROVIDER: "virtualbox"
   needs:
-    - build:virtualbox-15.2
+    - build:ceph-15.2-virtualbox
 
-deploy:virtualbox-15.2:
+deploy:ceph-15.2-virtualbox:
   <<: *job-vagrant-cloud-provider-upload
   stage: deploy
   cache:
-    key: "$CI_PIPELINE_ID-virtualbox-15.2"
+    key: "$CI_PIPELINE_ID-ceph-15.2-virtualbox"
     paths:
       - packer/*/output-vagrant
     policy: pull
   variables:
-    _PACKER_BUILDER_PROVIDER: "virtualbox"
-    _PACKER_BUILDER_VERSION: "15.2"
+    _BOX: "ceph-15.2"
+    _PROVIDER: "virtualbox"
   needs:
-    - test:virtualbox-15.2
+    - test:ceph-15.2-virtualbox

@@ -13,22 +13,26 @@ Learn more about Ceph: <https://ceph.io/>
 ## Supported Boxes and Respective Packer Template Links
 
   - [`alvistack/ceph-17.2`](https://app.vagrantup.com/alvistack/boxes/ceph-17.2)
-      - [`libvirt`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/libvirt-17.2/packer.json)
-      - [`virtualbox`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/virtualbox-17.2/packer.json)
+      - [`packer/ceph-17.2-libvirt/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-17.2-libvirt/packer.json)
+      - [`ceph-17.2-virtualbox/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-17.2-virtualbox/packer.json)
   - [`alvistack/ceph-16.2`](https://app.vagrantup.com/alvistack/boxes/ceph-16.2)
-      - [`libvirt`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/libvirt-16.2/packer.json)
-      - [`virtualbox`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/virtualbox-16.2/packer.json)
+      - [`packer/ceph-16.2-libvirt/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-16.2-libvirt/packer.json)
+      - [`packer/ceph-16.2-virtualbox/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-16.2-virtualbox/packer.json)
   - [`alvistack/ceph-15.2`](https://app.vagrantup.com/alvistack/boxes/ceph-15.2)
-      - [`libvirt`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/libvirt-15.2/packer.json)
-      - [`virtualbox`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/virtualbox-15.2/packer.json)
+      - [`packer/ceph-15.2-libvirt/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-15.2-libvirt/packer.json)
+      - [`packer/ceph-15.2-virtualbox/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-15.2-virtualbox/packer.json)
 
 ## Overview
 
   - Packaging with [Packer](https://www.packer.io/)
-  - Support [Vagrant](https://www.vagrantup.com/) as default [Ceph custom executor](https://docs.gitlab.com/runner/executors/README.html)
-  - Support [Libvirt](https://libvirt.org/) with [vagrant-libvirt](https://github.com/vagrant-libvirt/vagrant-libvirt)
-  - Support [VirtualBox](https://www.virtualbox.org/)
-  - Support [Docker](https://www.docker.com/)
+  - Minimal [Vagrant base box implementation](https://www.vagrantup.com/docs/boxes/base)
+  - Support [QEMU Guest Agent](https://wiki.qemu.org/Features/GuestAgent)
+  - Support [VirtualBox Guest Additions](https://www.virtualbox.org/manual/ch04.html)
+  - Support [Vagrant synced folder with rsync](https://www.vagrantup.com/docs/synced-folders/rsync)
+  - Support [Vagrant provisioner with Ansible](https://www.vagrantup.com/docs/provisioning/ansible)
+  - Standardize disk partition with GPT
+  - Standardize file system mount with UUID
+  - Standardize network interface with `eth0`
 
 ### Quick Start
 
@@ -79,7 +83,7 @@ Once you have [Vagrant](https://www.vagrantup.com/docs/installation) and [Virtau
 You could also run our [Molecule](https://molecule.readthedocs.io/en/stable/) test cases if you have [Vagrant](https://www.vagrantup.com/) and [Libvirt](https://libvirt.org/) installed, e.g.
 
     # Run Molecule on Ceph 17.2
-    molecule converge -s libvirt-17.2
+    molecule converge -s ceph-17.2-libvirt
 
 Please refer to [.gitlab-ci.yml](.gitlab-ci.yml) for more information on running Molecule.
 
