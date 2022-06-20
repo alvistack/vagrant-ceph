@@ -248,6 +248,8 @@ build:ceph-17.2-virtualbox:
   variables:
     _BOX: "ceph-17.2"
     _PROVIDER: "virtualbox"
+  allow_failure: true
+  retry: 0
 
 test:ceph-17.2-virtualbox:
   <<: *job-molecule-test
@@ -262,6 +264,8 @@ test:ceph-17.2-virtualbox:
     _PROVIDER: "virtualbox"
   needs:
     - build:ceph-17.2-virtualbox
+  allow_failure: true
+  retry: 0
 
 deploy:ceph-17.2-virtualbox:
   <<: *job-vagrant-cloud-provider-upload
@@ -276,6 +280,8 @@ deploy:ceph-17.2-virtualbox:
     _PROVIDER: "virtualbox"
   needs:
     - test:ceph-17.2-virtualbox
+  allow_failure: true
+  retry: 0
 
 build:ceph-16.2-libvirt:
   <<: *job-packer-build
@@ -326,6 +332,8 @@ build:ceph-16.2-virtualbox:
   variables:
     _BOX: "ceph-16.2"
     _PROVIDER: "virtualbox"
+  allow_failure: true
+  retry: 0
 
 test:ceph-16.2-virtualbox:
   <<: *job-molecule-test
@@ -340,6 +348,8 @@ test:ceph-16.2-virtualbox:
     _PROVIDER: "virtualbox"
   needs:
     - build:ceph-16.2-virtualbox
+  allow_failure: true
+  retry: 0
 
 deploy:ceph-16.2-virtualbox:
   <<: *job-vagrant-cloud-provider-upload
@@ -354,6 +364,8 @@ deploy:ceph-16.2-virtualbox:
     _PROVIDER: "virtualbox"
   needs:
     - test:ceph-16.2-virtualbox
+  allow_failure: true
+  retry: 0
 
 build:ceph-15.2-libvirt:
   <<: *job-packer-build
@@ -404,6 +416,8 @@ build:ceph-15.2-virtualbox:
   variables:
     _BOX: "ceph-15.2"
     _PROVIDER: "virtualbox"
+  allow_failure: true
+  retry: 0
 
 test:ceph-15.2-virtualbox:
   <<: *job-molecule-test
@@ -418,6 +432,8 @@ test:ceph-15.2-virtualbox:
     _PROVIDER: "virtualbox"
   needs:
     - build:ceph-15.2-virtualbox
+  allow_failure: true
+  retry: 0
 
 deploy:ceph-15.2-virtualbox:
   <<: *job-vagrant-cloud-provider-upload
@@ -432,3 +448,5 @@ deploy:ceph-15.2-virtualbox:
     _PROVIDER: "virtualbox"
   needs:
     - test:ceph-15.2-virtualbox
+  allow_failure: true
+  retry: 0
