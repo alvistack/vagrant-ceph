@@ -45,7 +45,7 @@ Once you have [Vagrant](https://www.vagrantup.com/docs/installation) and [Virtau
       config.vm.box = 'alvistack/ceph-17.2'
     
       config.vm.provider :libvirt do |libvirt|
-        libvirt.cpu_mode = 'host-passthrough'
+        libvirt.cpu_mode = 'host-model'
         libvirt.cpus = 2
         libvirt.disk_bus = 'virtio'
         libvirt.disk_driver :cache => 'writeback'
