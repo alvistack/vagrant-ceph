@@ -14,7 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- hosts: all
+- name: converge | all
+  hosts: all
   remote_user: root
   become: true
   tasks:
@@ -88,7 +89,8 @@
       ansible.builtin.include_role:
         name: sshd
 
-- hosts: ceph_mon:ceph_mgr:ceph_osd:ceph_mds:ceph_rgw
+- name: converge | ceph_mon:ceph_mgr:ceph_osd:ceph_mds:ceph_rgw
+  hosts: ceph_mon:ceph_mgr:ceph_osd:ceph_mds:ceph_rgw
   remote_user: root
   become: true
   tasks:
@@ -96,7 +98,8 @@
       ansible.builtin.include_role:
         name: ceph_common
 
-- hosts: ceph_mon
+- name: converge | ceph_mon
+  hosts: ceph_mon
   remote_user: root
   become: true
   tasks:
@@ -104,7 +107,8 @@
       ansible.builtin.include_role:
         name: ceph_mon
 
-- hosts: ceph_mgr
+- name: converge | ceph_mgr
+  hosts: ceph_mgr
   remote_user: root
   become: true
   tasks:
@@ -112,7 +116,8 @@
       ansible.builtin.include_role:
         name: ceph_mgr
 
-- hosts: ceph_osd
+- name: converge | ceph_osd
+  hosts: ceph_osd
   remote_user: root
   become: true
   tasks:
@@ -120,7 +125,8 @@
       ansible.builtin.include_role:
         name: ceph_osd
 
-- hosts: ceph_mds
+- name: converge | ceph_mds
+  hosts: ceph_mds
   remote_user: root
   become: true
   tasks:
@@ -128,7 +134,8 @@
       ansible.builtin.include_role:
         name: ceph_mds
 
-- hosts: ceph_rgw
+- name: converge | ceph_rgw
+  hosts: ceph_rgw
   remote_user: root
   become: true
   tasks:

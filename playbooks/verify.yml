@@ -14,7 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- hosts: all
+- name: verify | all
+  hosts: all
   remote_user: root
   become: true
   tasks:
@@ -71,7 +72,8 @@
       loop:
         - { dest: "/root/.ssh/authorized_keys", mode: "0600" }
 
-- hosts: ceph_mon:ceph_mgr:ceph_osd:ceph_mds:ceph_rgw
+- name: verify | ceph_mon:ceph_mgr:ceph_osd:ceph_mds:ceph_rgw
+  hosts: ceph_mon:ceph_mgr:ceph_osd:ceph_mds:ceph_rgw
   remote_user: root
   become: true
   tasks:
@@ -79,7 +81,8 @@
       ansible.builtin.include_role:
         name: ceph_common
 
-- hosts: ceph_mon
+- name: verify | ceph_mon
+  hosts: ceph_mon
   remote_user: root
   become: true
   tasks:
@@ -87,7 +90,8 @@
       ansible.builtin.include_role:
         name: ceph_mon
 
-- hosts: ceph_mgr
+- name: verify | ceph_mgr
+  hosts: ceph_mgr
   remote_user: root
   become: true
   tasks:
@@ -95,7 +99,8 @@
       ansible.builtin.include_role:
         name: ceph_mgr
 
-- hosts: ceph_osd
+- name: verify | ceph_osd
+  hosts: ceph_osd
   remote_user: root
   become: true
   tasks:
@@ -103,7 +108,8 @@
       ansible.builtin.include_role:
         name: ceph_osd
 
-- hosts: ceph_mds
+- name: verify | ceph_mds
+  hosts: ceph_mds
   remote_user: root
   become: true
   tasks:
@@ -111,7 +117,8 @@
       ansible.builtin.include_role:
         name: ceph_mds
 
-- hosts: ceph_rgw
+- name: verify | ceph_rgw
+  hosts: ceph_rgw
   remote_user: root
   become: true
   tasks:
@@ -119,7 +126,8 @@
       ansible.builtin.include_role:
         name: ceph_rgw
 
-- hosts: ansible
+- name: verify | ansible
+  hosts: ansible
   remote_user: root
   become: true
   tasks:
@@ -149,7 +157,8 @@
       register: base64_decode_result
       changed_when: base64_decode_result is not succeeded
 
-- hosts: ceph_mon:ceph_mgr:ceph_osd:ceph_mds:ceph_rgw
+- name: verify | ceph_mon:ceph_mgr:ceph_osd:ceph_mds:ceph_rgw
+  hosts: ceph_mon:ceph_mgr:ceph_osd:ceph_mds:ceph_rgw
   remote_user: root
   become: true
   tasks:
