@@ -15,7 +15,7 @@
 # limitations under the License.
 
 namespace: alvistack
-name: vagrant-ceph
+name: ceph
 description: Vagrant Box Packaging for Ceph
 
 version: 0.0.0
