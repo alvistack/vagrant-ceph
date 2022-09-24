@@ -19,7 +19,7 @@
   remote_user: root
   become: true
   tasks:
-    - name: "systemctl stop ceph-mon@{{ inventory_hostname }}.service"
+    - name: systemctl stop ceph-*@*.service
       ansible.builtin.service:
         name: "{{ item.name }}"
         state: "stopped"
