@@ -75,29 +75,24 @@
       changed_when: false
       failed_when: false
 
-    - name: rm -rf /etc/ssh/ssh_host_*
-      ansible.builtin.raw: |
-        set -eu
-        rm -rf /etc/ssh/ssh_host_*
-      args:
-        executable: "/bin/bash"
+    - name: systemctl stop ceph-*@*.service
+      ansible.builtin.service:
+        name: "{{ item.name }}"
+        state: "stopped"
+        enabled: false
+      loop:
+        - { name: "ceph-radosgw@{{ inventory_hostname }}.service" }
+        - { name: "ceph-mds@{{ inventory_hostname }}.service" }
+        - { name: "ceph-mgr@{{ inventory_hostname }}.service" }
+        - { name: "ceph-mon@{{ inventory_hostname }}.service" }
       changed_when: false
       failed_when: false
 
-    - name: truncate --size 0 /etc/machine-id
-      ansible.builtin.raw: |
-        set -eu
-        truncate --size 0 /etc/machine-id
-        ln -fs /etc/machine-id /var/lib/dbus/machine-id
-      args:
-        executable: "/bin/bash"
-      changed_when: false
-      failed_when: false
-
-    - name: rm -rf /var/lib/systemd/random-seed
-      ansible.builtin.raw: |
-        set -eu
-        rm -rf /var/lib/systemd/random-seed
+    - name: rm -rf /var/lib/ceph/*
+      ansible.builtin.shell: |
+        set -euxo pipefail
+        rm -rf /etc/ceph/*
+        rm -rf /var/lib/ceph/*
       args:
         executable: "/bin/bash"
       changed_when: false
