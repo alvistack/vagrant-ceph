@@ -41,9 +41,10 @@
           skip: true
 
     - name: ssh-keygen
-      ansible.builtin.shell: |
-        set -euxo pipefail
-        ssh-keygen -A
+      ansible.builtin.shell:
+        cmd: |
+          set -euxo pipefail
+          ssh-keygen -A
       args:
         executable: "/bin/bash"
       changed_when: false
@@ -136,9 +137,10 @@
         name: ceph_common
 
     - name: base64 encode
-      ansible.builtin.shell: |
-        set -euxo pipefail
-        tar zcfP - {{ _params | join(' ') }} | base64 -w 0
+      ansible.builtin.shell:
+        cmd: |
+          set -euxo pipefail
+          tar zcfP - {{ _params | join(' ') }} | base64 -w 0
       vars:
         _params:
           - "/etc/ceph/ceph.client.admin.keyring"
@@ -149,9 +151,10 @@
       changed_when: base64_encode_result is not succeeded
 
     - name: base64 decode
-      ansible.builtin.shell: |
-        set -euxo pipefail
-        echo -n {{ base64_encode_result.stdout | quote }} | base64 -d | tar zx -C /
+      ansible.builtin.shell:
+        cmd: |
+          set -euxo pipefail
+          echo -n {{ base64_encode_result.stdout | quote }} | base64 -d | tar zx -C /
       args:
         executable: "/bin/bash"
       register: base64_decode_result
@@ -163,24 +166,28 @@
   become: true
   tasks:
     - name: ceph --version
-      ansible.builtin.command: ceph --version
+      ansible.builtin.command:
+        cmd: ceph --version
       register: result
       changed_when: result is not succeeded
 
     - name: rbd --version
-      ansible.builtin.command: rbd --version
+      ansible.builtin.command:
+        cmd: rbd --version
       register: result
       changed_when: result is not succeeded
 
     - name: mount.ceph -h
-      ansible.builtin.command: mount.ceph -h
+      ansible.builtin.command:
+        cmd: mount.ceph -h
       register: result
       changed_when: result is not succeeded
 
     - name: ceph health detail
-      ansible.builtin.shell: |
-        set -euxo pipefail
-        ceph health detail | grep 'HEALTH_OK'
+      ansible.builtin.shell:
+        cmd: |
+          set -euxo pipefail
+          ceph health detail | grep 'HEALTH_OK'
       args:
         executable: "/bin/bash"
       loop: "{{ ansible_play_hosts }}"
