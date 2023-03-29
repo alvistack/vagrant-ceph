@@ -75,11 +75,6 @@ platforms:
       - "vm.provision :shell, inline: 'systemctl disable guestfs-firstboot.service'"
     groups:
       - ceph_osd
-lint: |
-  set -euxo pipefail
-  flake8
-  yamllint .
-  ansible-lint
 dependency:
   name: galaxy
   options:
