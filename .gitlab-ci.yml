@@ -248,7 +248,8 @@ build:ceph-17.2-virtualbox:
   variables:
     _BOX: "ceph-17.2"
     _PROVIDER: "virtualbox"
-  retry: 0
+  needs:
+    - build:ceph-17.2-libvirt
 
 test:ceph-17.2-virtualbox:
   <<: *job-molecule-test
@@ -327,7 +328,8 @@ build:ceph-16.2-virtualbox:
   variables:
     _BOX: "ceph-16.2"
     _PROVIDER: "virtualbox"
-  retry: 0
+  needs:
+    - build:ceph-16.2-libvirt
 
 test:ceph-16.2-virtualbox:
   <<: *job-molecule-test
@@ -406,7 +408,8 @@ build:ceph-15.2-virtualbox:
   variables:
     _BOX: "ceph-15.2"
     _PROVIDER: "virtualbox"
-  retry: 0
+  needs:
+    - build:ceph-15.2-libvirt
 
 test:ceph-15.2-virtualbox:
   <<: *job-molecule-test
