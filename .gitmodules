@@ -50,3 +50,31 @@
 	path = roles/timezone
 	url = https://github.com/alvistack/ansible-role-timezone.git
 	branch = develop
+[submodule "roles/bootstrap"]
+	path = roles/bootstrap
+	url = https://github.com/alvistack/ansible-role-bootstrap.git
+	branch = develop
+[submodule "roles/chrony"]
+	path = roles/chrony
+	url = https://github.com/alvistack/ansible-role-chrony.git
+	branch = develop
+[submodule "roles/git"]
+	path = roles/git
+	url = https://github.com/alvistack/ansible-role-git.git
+	branch = develop
+[submodule "roles/rclone"]
+	path = roles/rclone
+	url = https://github.com/alvistack/ansible-role-rclone.git
+	branch = develop
+[submodule "roles/restic"]
+	path = roles/restic
+	url = https://github.com/alvistack/ansible-role-restic.git
+	branch = develop
+[submodule "roles/vim"]
+	path = roles/vim
+	url = https://github.com/alvistack/ansible-role-vim.git
+	branch = develop
+[submodule "roles/zram_generator"]
+	path = roles/zram_generator
+	url = https://github.com/alvistack/ansible-role-zram_generator.git
+	branch = develop

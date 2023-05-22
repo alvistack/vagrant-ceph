@@ -1,0 +1,116 @@
+---
+
+# Copyright 2023 Wong Hoi Sing Edison <hswong3i@pantarei-design.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+- name: 50-ceph-install | all
+  hosts: all
+  remote_user: root
+  become: true
+
+- name: 50-ceph-install | ceph_mon:ceph_mgr:ceph_osd:ceph_mds:ceph_rgw
+  hosts: ceph_mon:ceph_mgr:ceph_osd:ceph_mds:ceph_rgw
+  remote_user: root
+  become: true
+  tasks:
+    - name: include role
+      ansible.builtin.include_role:
+        name: ceph_common
+      tags: ceph_common
+
+- name: 50-ceph-install | ceph_mon
+  hosts: ceph_mon
+  remote_user: root
+  become: true
+  tasks:
+    - name: include role
+      ansible.builtin.include_role:
+        name: ceph_mon
+      tags: ceph_mon
+
+- name: 50-ceph-install | ceph_mgr
+  hosts: ceph_mgr
+  remote_user: root
+  become: true
+  tasks:
+    - name: include role
+      ansible.builtin.include_role:
+        name: ceph_mgr
+      tags: ceph_mgr
+
+- name: 50-ceph-install | ceph_osd
+  hosts: ceph_osd
+  remote_user: root
+  become: true
+  tasks:
+    - name: include role
+      ansible.builtin.include_role:
+        name: ceph_osd
+      tags: ceph_osd
+
+- name: 50-ceph-install | ceph_mds
+  hosts: ceph_mds
+  remote_user: root
+  become: true
+  tasks:
+    - name: include role
+      ansible.builtin.include_role:
+        name: ceph_mds
+      tags: ceph_mds
+
+- name: 50-ceph-install | ceph_rgw
+  hosts: ceph_rgw
+  remote_user: root
+  become: true
+  tasks:
+    - name: include role
+      ansible.builtin.include_role:
+        name: ceph_rgw
+      tags: ceph_rgw
+
+- name: 50-ceph-install | ansible
+  hosts: ansible
+  remote_user: root
+  become: true
+  tasks:
+    - name: include role
+      ansible.builtin.include_role:
+        name: ceph_common
+      tags: ceph_common
+
+    - name: base64 encode
+      ansible.builtin.shell:
+        cmd: |
+          set -euxo pipefail
+          tar zcfP - {{ _params | join(' ') }} | base64 -w 0
+      vars:
+        _params:
+          - "/etc/ceph/ceph.client.admin.keyring"
+      args:
+        executable: "/bin/bash"
+      delegate_to: "{{ groups['ceph_mon'][0] }}"
+      register: base64_encode_result
+      changed_when: base64_encode_result is not succeeded
+      tags: ceph_common
+
+    - name: base64 decode
+      ansible.builtin.shell:
+        cmd: |
+          set -euxo pipefail
+          echo -n {{ base64_encode_result.stdout | quote }} | base64 -d | tar zx -C /
+      args:
+        executable: "/bin/bash"
+      register: base64_decode_result
+      changed_when: base64_decode_result is not succeeded
+      tags: ceph_common

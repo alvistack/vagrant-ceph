@@ -14,25 +14,38 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-- name: 50-ceph-reboot | ceph_mon:ceph_mgr:ceph_osd:ceph_mds:ceph_rgw:!ansible
-  hosts: ceph_mon:ceph_mgr:ceph_osd:ceph_mds:ceph_rgw:!ansible
+- name: 50-ceph-verify | ceph_mon:ceph_mgr:ceph_osd:ceph_mds:ceph_rgw
+  hosts: ceph_mon:ceph_mgr:ceph_osd:ceph_mds:ceph_rgw
   remote_user: root
   become: true
   tasks:
-    - name: ceph health detail
+    - name: ceph --version
       ansible.builtin.command:
-        cmd: bash -c "ceph crash archive-all && ceph health detail | grep 'HEALTH_OK'"
+        cmd: ceph --version
+      register: result
+      changed_when: result is not succeeded
+
+    - name: rbd --version
+      ansible.builtin.command:
+        cmd: rbd --version
+      register: result
+      changed_when: result is not succeeded
+
+    - name: mount.ceph -h
+      ansible.builtin.command:
+        cmd: mount.ceph -h
+      register: result
+      changed_when: result is not succeeded
+
+    - name: ceph health detail
+      ansible.builtin.shell:
+        cmd: |
+          set -euxo pipefail
+          ceph crash archive-all && ceph health detail | grep 'HEALTH_OK'
+      args:
+        executable: "/bin/bash"
       when: inventory_hostname == ansible_play_hosts[0]
       register: result
       changed_when: result is not succeeded
       until: result is succeeded
       retries: 60
-
-    - name: reboot
-      ansible.builtin.reboot:
-        connect_timeout: 1800
-        reboot_timeout: 1800
-        pre_reboot_delay: 60
-        post_reboot_delay: 60
-        test_command: bash -c "ceph crash archive-all && ceph health detail | grep 'HEALTH_OK'"
-      throttle: 1
