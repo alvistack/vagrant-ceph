@@ -18,35 +18,35 @@ Learn more about Ceph: <https://ceph.io/>
 
 ## Supported Boxes and Respective Packer Template Links
 
--   [`alvistack/ceph-18.2`](https://app.vagrantup.com/alvistack/boxes/ceph-18.2)
-    -   [`packer/ceph-18.2-libvirt/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-18.2-libvirt/packer.json)
-    -   [`ceph-18.2-virtualbox/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-18.2-virtualbox/packer.json)
--   [`alvistack/ceph-17.2`](https://app.vagrantup.com/alvistack/boxes/ceph-17.2)
-    -   [`packer/ceph-17.2-libvirt/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-17.2-libvirt/packer.json)
-    -   [`ceph-17.2-virtualbox/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-17.2-virtualbox/packer.json)
--   [`alvistack/ceph-16.2`](https://app.vagrantup.com/alvistack/boxes/ceph-16.2)
-    -   [`packer/ceph-16.2-libvirt/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-16.2-libvirt/packer.json)
-    -   [`packer/ceph-16.2-virtualbox/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-16.2-virtualbox/packer.json)
--   [`alvistack/ceph-15.2`](https://app.vagrantup.com/alvistack/boxes/ceph-15.2)
-    -   [`packer/ceph-15.2-libvirt/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-15.2-libvirt/packer.json)
-    -   [`packer/ceph-15.2-virtualbox/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-15.2-virtualbox/packer.json)
+- [`alvistack/ceph-18.2`](https://app.vagrantup.com/alvistack/boxes/ceph-18.2)
+  - [`packer/ceph-18.2-libvirt/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-18.2-libvirt/packer.json)
+  - [`ceph-18.2-virtualbox/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-18.2-virtualbox/packer.json)
+- [`alvistack/ceph-17.2`](https://app.vagrantup.com/alvistack/boxes/ceph-17.2)
+  - [`packer/ceph-17.2-libvirt/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-17.2-libvirt/packer.json)
+  - [`ceph-17.2-virtualbox/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-17.2-virtualbox/packer.json)
+- [`alvistack/ceph-16.2`](https://app.vagrantup.com/alvistack/boxes/ceph-16.2)
+  - [`packer/ceph-16.2-libvirt/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-16.2-libvirt/packer.json)
+  - [`packer/ceph-16.2-virtualbox/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-16.2-virtualbox/packer.json)
+- [`alvistack/ceph-15.2`](https://app.vagrantup.com/alvistack/boxes/ceph-15.2)
+  - [`packer/ceph-15.2-libvirt/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-15.2-libvirt/packer.json)
+  - [`packer/ceph-15.2-virtualbox/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-15.2-virtualbox/packer.json)
 
 ## Overview
 
--   Packaging with [Packer](https://www.packer.io/)
--   Minimal [Vagrant base box
-    implementation](https://www.vagrantup.com/docs/boxes/base)
--   Support [QEMU Guest
-    Agent](https://wiki.qemu.org/Features/GuestAgent)
--   Support [VirtualBox Guest
-    Additions](https://www.virtualbox.org/manual/ch04.html)
--   Support [Vagrant synced folder with
-    rsync](https://www.vagrantup.com/docs/synced-folders/rsync)
--   Support [Vagrant provisioner with
-    Ansible](https://www.vagrantup.com/docs/provisioning/ansible)
--   Standardize disk partition with GPT
--   Standardize file system mount with UUID
--   Standardize network interface with `eth0`
+- Packaging with [Packer](https://www.packer.io/)
+- Minimal [Vagrant base box
+  implementation](https://www.vagrantup.com/docs/boxes/base)
+- Support [QEMU Guest
+  Agent](https://wiki.qemu.org/Features/GuestAgent)
+- Support [VirtualBox Guest
+  Additions](https://www.virtualbox.org/manual/ch04.html)
+- Support [Vagrant synced folder with
+  rsync](https://www.vagrantup.com/docs/synced-folders/rsync)
+- Support [Vagrant provisioner with
+  Ansible](https://www.vagrantup.com/docs/provisioning/ansible)
+- Standardize disk partition with GPT
+- Standardize file system mount with UUID
+- Standardize network interface with `eth0`
 
 ### Quick Start
 
@@ -126,12 +126,12 @@ latest packages provided by the base image project.
 
 ## License
 
--   Code released under [Apache License 2.0](LICENSE)
--   Docs released under [CC BY
-    4.0](http://creativecommons.org/licenses/by/4.0/)
+- Code released under [Apache License 2.0](LICENSE)
+- Docs released under [CC BY
+  4.0](http://creativecommons.org/licenses/by/4.0/)
 
 ## Author Information
 
--   Wong Hoi Sing Edison
-    -   <https://twitter.com/hswong3i>
-    -   <https://github.com/hswong3i>
+- Wong Hoi Sing Edison
+  - <https://twitter.com/hswong3i>
+  - <https://github.com/hswong3i>
