@@ -268,7 +268,7 @@ build:ceph-19.2-virtualbox:
     _PROVIDER: virtualbox
     _ARCHITECTURE: amd64
   needs:
-    - build:ceph-19.2-libvirt
+    - deploy:ceph-19.2-libvirt
 
 test:ceph-19.2-virtualbox:
   <<: *job-molecule-test
@@ -354,7 +354,7 @@ build:ceph-18.2-virtualbox:
     _PROVIDER: virtualbox
     _ARCHITECTURE: amd64
   needs:
-    - build:ceph-18.2-libvirt
+    - deploy:ceph-18.2-libvirt
 
 test:ceph-18.2-virtualbox:
   <<: *job-molecule-test
@@ -440,7 +440,7 @@ build:ceph-17.2-virtualbox:
     _PROVIDER: virtualbox
     _ARCHITECTURE: amd64
   needs:
-    - build:ceph-17.2-libvirt
+    - deploy:ceph-17.2-libvirt
 
 test:ceph-17.2-virtualbox:
   <<: *job-molecule-test
@@ -526,7 +526,7 @@ build:ceph-16.2-virtualbox:
     _PROVIDER: virtualbox
     _ARCHITECTURE: amd64
   needs:
-    - build:ceph-16.2-libvirt
+    - deploy:ceph-16.2-libvirt
 
 test:ceph-16.2-virtualbox:
   <<: *job-molecule-test
@@ -612,7 +612,7 @@ build:ceph-15.2-virtualbox:
     _PROVIDER: virtualbox
     _ARCHITECTURE: amd64
   needs:
-    - build:ceph-15.2-libvirt
+    - deploy:ceph-15.2-libvirt
 
 test:ceph-15.2-virtualbox:
   <<: *job-molecule-test
