@@ -2,6 +2,8 @@
 
 ## YYYYMMDD.Y.Z - TBC
 
+- Remove Ceph 16.2 support
+- Remove Ceph 15.2 support
 - Support Fedora 42
 
 ## 20250423.1.2 - 2025-04-23
