@@ -27,12 +27,6 @@ Learn more about Ceph: <https://ceph.io/>
 - [`alvistack/ceph-17.2`](https://app.vagrantup.com/alvistack/boxes/ceph-17.2)
   - [`packer/ceph-17.2-libvirt/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-17.2-libvirt/packer.json)
   - [`ceph-17.2-virtualbox/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-17.2-virtualbox/packer.json)
-- [`alvistack/ceph-16.2`](https://app.vagrantup.com/alvistack/boxes/ceph-16.2)
-  - [`packer/ceph-16.2-libvirt/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-16.2-libvirt/packer.json)
-  - [`packer/ceph-16.2-virtualbox/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-16.2-virtualbox/packer.json)
-- [`alvistack/ceph-15.2`](https://app.vagrantup.com/alvistack/boxes/ceph-15.2)
-  - [`packer/ceph-15.2-libvirt/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-15.2-libvirt/packer.json)
-  - [`packer/ceph-15.2-virtualbox/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-15.2-virtualbox/packer.json)
 
 ## Overview
 
