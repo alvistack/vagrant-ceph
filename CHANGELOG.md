@@ -2,6 +2,9 @@
 
 ## YYYYMMDD.Y.Z - TBC
 
+## 20250521.1.1 - 2025-05-21
+
+- Support Ansible community package 11.6.0
 - Remove Ceph 16.2 support
 - Remove Ceph 15.2 support
 - Support Fedora 42
