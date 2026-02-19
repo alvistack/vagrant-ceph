@@ -9,7 +9,7 @@ tag](https://img.shields.io/github/tag/alvistack/vagrant-ceph.svg)](https://gith
 [![GitHub
 license](https://img.shields.io/github/license/alvistack/vagrant-ceph.svg)](https://github.com/alvistack/vagrant-ceph/blob/master/LICENSE)
 -[![Vagrant Box
-download](https://img.shields.io/badge/dynamic/json?label=alvistack%2Fceph-19.2&query=%24.boxes%5B%3A1%5D.downloads&url=https%3A%2F%2Fapp.vagrantup.com%2Fapi%2Fv1%2Fsearch%3Fq%3Dalvistack%2Fceph-19.2)](https://app.vagrantup.com/alvistack/boxes/ceph-19.2)
+download](https://img.shields.io/badge/dynamic/json?label=alvistack%2Fceph-20.2&query=%24.boxes%5B%3A1%5D.downloads&url=https%3A%2F%2Fapp.vagrantup.com%2Fapi%2Fv1%2Fsearch%3Fq%3Dalvistack%2Fceph-20.2)](https://app.vagrantup.com/alvistack/boxes/ceph-20.2)
 
 Ceph uniquely delivers object, block, and file storage in one unified
 system.
@@ -18,15 +18,15 @@ Learn more about Ceph: <https://ceph.io/>
 
 ## Supported Boxes and Respective Packer Template Links
 
+- [`alvistack/ceph-20.2`](https://app.vagrantup.com/alvistack/boxes/ceph-20.2)
+  - [`packer/ceph-20.2-libvirt/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-20.2-libvirt/packer.json)
+  - [`ceph-20.2-virtualbox/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-20.2-virtualbox/packer.json)
 - [`alvistack/ceph-19.2`](https://app.vagrantup.com/alvistack/boxes/ceph-19.2)
   - [`packer/ceph-19.2-libvirt/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-19.2-libvirt/packer.json)
   - [`ceph-19.2-virtualbox/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-19.2-virtualbox/packer.json)
 - [`alvistack/ceph-18.2`](https://app.vagrantup.com/alvistack/boxes/ceph-18.2)
   - [`packer/ceph-18.2-libvirt/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-18.2-libvirt/packer.json)
   - [`ceph-18.2-virtualbox/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-18.2-virtualbox/packer.json)
-- [`alvistack/ceph-17.2`](https://app.vagrantup.com/alvistack/boxes/ceph-17.2)
-  - [`packer/ceph-17.2-libvirt/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-17.2-libvirt/packer.json)
-  - [`ceph-17.2-virtualbox/packer.json`](https://github.com/alvistack/vagrant-ceph/blob/master/packer/ceph-17.2-virtualbox/packer.json)
 
 ## Overview
 
@@ -55,8 +55,8 @@ directory](https://learn.hashicorp.com/tutorials/vagrant/getting-started-project
     # Initialize Vagrant
     cat > Vagrantfile <<-EOF
     Vagrant.configure('2') do |config|
-      config.vm.hostname = 'ceph-19.2'
-      config.vm.box = 'alvistack/ceph-19.2'
+      config.vm.hostname = 'ceph-20.2'
+      config.vm.box = 'alvistack/ceph-20.2'
 
       config.vm.provider :libvirt do |libvirt|
         libvirt.cpu_mode = 'host-passthrough'
@@ -99,8 +99,8 @@ You could also run our
 have [Vagrant](https://www.vagrantup.com/) and
 [Libvirt](https://libvirt.org/) installed, e.g.
 
-    # Run Molecule on Ceph 19.2
-    molecule converge -s ceph-19.2-libvirt
+    # Run Molecule on Ceph 20.2
+    molecule converge -s ceph-20.2-libvirt
 
 Please refer to [.gitlab-ci.yml](.gitlab-ci.yml) for more information on
 running Molecule.
